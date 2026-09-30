@@ -1,6 +1,7 @@
 import Hero from "./components/Hero.jsx";
 import BeforeAfter from "./components/BeforeAfter.jsx";
 import Problem from "./components/Problem.jsx";
+import FocusBridge from "./components/FocusBridge.jsx";
 import Pipeline from "./components/Pipeline.jsx";
 import RecordTransform from "./components/RecordTransform.jsx";
 import ExcelRules from "./components/ExcelRules.jsx";
@@ -17,6 +18,7 @@ export default function App() {
       <Hero />
       <BeforeAfter />
       <Problem />
+      <FocusBridge />
       <Pipeline />
       <RecordTransform />
       <ExcelRules />

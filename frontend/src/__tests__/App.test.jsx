@@ -63,6 +63,26 @@ describe("landing page", () => {
   });
 });
 
+describe("bridge between the problem and the solution", () => {
+  it("is a compact three-item line placed between The problem and The solution", () => {
+    render(<App />);
+    const bridge = screen.getByRole("group", { name: "What I focused on" });
+    expect(screen.getByText("What I focused on")).toBeInTheDocument();
+    const items = within(bridge).getAllByRole("listitem").map((li) => li.textContent);
+    expect(items).toEqual(["Understand the data", "Translate the rules", "Design for reuse"]);
+    const order = [...document.querySelectorAll("main > *")].map((n) => n.id || n.getAttribute("aria-label") || n.className);
+    const p = order.indexOf("problem");
+    expect(order[p + 1]).toBe("What I focused on");
+    expect(order[p + 2]).toBe("solution");
+  });
+
+  it("adds no heading and no control", () => {
+    render(<App />);
+    expect(screen.queryByRole("heading", { name: "What I focused on" })).not.toBeInTheDocument();
+    expect(screen.getAllByRole("button")).toHaveLength(1);
+  });
+});
+
 describe("signature interaction: Run example transformation", () => {
   const stage = (n) => screen.getByTestId(`stage-${n}`);
 
@@ -131,6 +151,6 @@ describe("processing summary from the representative demo run", () => {
   it("does not add new controls or sections", () => {
     render(<App />);
     expect(screen.getAllByRole("button")).toHaveLength(1);
-    expect(document.querySelectorAll("main > *")).toHaveLength(11);
+    expect(document.querySelectorAll("main > *")).toHaveLength(12); // 11 sections + the compact bridge
   });
 });

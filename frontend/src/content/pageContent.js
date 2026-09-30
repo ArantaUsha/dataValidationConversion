@@ -47,6 +47,11 @@ export const problem = {
     "Large financial reporting datasets had to be prepared from raw XML before they could be processed by the downstream reporting platform.",
 };
 
+export const focus = {
+  label: "What I focused on",
+  items: ["Understand the data", "Translate the rules", "Design for reuse"],
+};
+
 export const solution = {
   title: "The solution",
   subtitle: "A reusable data transformation workflow",

@@ -20,6 +20,7 @@
 | `report_code` is written on each line | Illustrates the report-code mapping; the real location in the original output is unverified | Representative |
 | Duplicate key is value + row + column | The definition in the project documentation | Adopted |
 | The workbench is kept as a secondary tool | It is useful for trying your own files, but is not part of the story | Adopted |
+| The landing page is frozen at tag `landing-page-v1.0`: no further changes to its layout, copy or behaviour | The story, section order and copy are approved as they stand. Changes now go through a new decision, not an edit | Adopted |
 | Client-related documents are kept out of the repository | The private project documents are git-ignored; this folder is the public documentation | Adopted |
 
 ## Known limitations

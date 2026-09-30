@@ -15,9 +15,9 @@ Last run on the current code:
 | Suite | Tool | Tests | Result |
 |---|---|---|---|
 | Python processor | pytest | 28 | 28 passed |
-| Landing page | Vitest + Testing Library (jsdom) | 13 | 13 passed |
+| Landing page | Vitest + Testing Library (jsdom) | 15 | 15 passed |
 | Workbench | Node test runner | 13 | 13 passed |
-| **Total** | | **54** | **54 passed** |
+| **Total** | | **56** | **56 passed** |
 
 ## What the processor tests prove
 
@@ -54,7 +54,8 @@ The last test is the guard that keeps the landing page honest. If you change the
 - The interaction is understandable before clicking; running it reveals all four stages from the snapshot; it works from the keyboard and can be replayed
 - The duplicate and mapping-miss examples show their exact row and column
 - The Excel rows, report grid and processing summary come from processor output, and the summary numbers are asserted against the raw snapshot
-- No new sections or controls have been added
+- The compact "What I focused on" bridge sits between The problem and The solution, with three items, no heading and no control
+- Apart from that bridge, no sections or controls have been added
 
 ## Performance
 

@@ -83,6 +83,14 @@ h1 { font-size: clamp(2rem, 5vw, 3.25rem); line-height: 1.1; letter-spacing: -0.
 .metric-figure { font-size: clamp(1.6rem, 3.2vw, 2.3rem); font-weight: 800; color: var(--accent); line-height: 1.15; }
 .metric-label { color: var(--muted); font-size: 0.95rem; }
 
+/* ---------- bridge: "What I focused on" ---------- */
+.bridge { padding: 0 0 clamp(40px, 6vw, 64px); }
+.bridge-inner { display: flex; align-items: center; justify-content: center; gap: 12px 28px; flex-wrap: wrap; padding: 18px 0; border-block: 1px solid var(--line); }
+.bridge-label { font-size: 0.78rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); }
+.bridge ul { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; justify-content: center; gap: 6px 0; }
+.bridge li { font-weight: 600; padding: 0 22px; }
+.bridge li + li { border-left: 1px solid var(--line); }
+
 /* ---------- pipeline ---------- */
 .pipeline { list-style: none; padding: 34px 0 0; margin: 0; display: grid; grid-template-columns: repeat(6, 1fr); gap: 22px; counter-reset: n; }
 .node { position: relative; display: flex; flex-direction: column; gap: 6px; background: #fff; border: 1px solid var(--line); border-radius: var(--radius); padding: 16px; font-size: 0.9rem; color: var(--muted); }
@@ -190,6 +198,9 @@ h1 { font-size: clamp(2rem, 5vw, 3.25rem); line-height: 1.1; letter-spacing: -0.
   .stages, .flow3 { grid-template-columns: 1fr; }
   .stage:not(:last-child)::after, .flow3 li:not(:last-child)::after { content: "\2193"; right: auto; left: 50%; top: auto; bottom: -22px; transform: translateX(-50%); }
   .metrics, .caps { grid-template-columns: 1fr; gap: 22px; }
+  .bridge-inner { flex-direction: column; gap: 8px; }
+  .bridge ul { flex-direction: column; align-items: center; gap: 4px; }
+  .bridge li, .bridge li + li { padding: 0; border-left: 0; }
   .tech { margin-left: 0; }
   .tech li { grid-template-columns: 84px 1fr; }
 }
