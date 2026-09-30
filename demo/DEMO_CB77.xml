@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rapportage registratienummer="DEMO-104" nihil="false" period="2024-06-30" FormulierID="DEMO_CB77" versie="1" frequentie="M">
+    <post value="EBA_FIN_X01" cube="c01" rij="r_0010" kolom="c_0010" rijnr="1"/>
+    <post value="1250000.50" cube="c01" rij="r_0020" kolom="c_0010" rijnr="1"/>
+    <post value="FALSE" cube="c01" rij="r_0030" kolom="c_0010" rijnr="1"/>
+    <post value="EBA_FIN_X02" cube="c01" rij="r_0040" kolom="c_0010" rijnr="1"/>
+    <post value="EBA_FIN_X02" cube="c01" rij="r_0040" kolom="c_0010" rijnr="1"/>
+    <post value="EBA_FIN_X99" cube="c01" rij="r_0050" kolom="c_0010" rijnr="1"/>
+    <post value="750000000000000000" cube="c01" rij="r_0060" kolom="c_0010" rijnr="1"/>
+    <post value="EBA_RISK_B01" cube="c01" rij="r_0070" kolom="c_0010" rijnr="2"/>
+    <post value="0.875" cube="c01" rij="r_0070" kolom="c_0020" rijnr="2"/>
+    <post value="TRUE" cube="c01" rij="r_0070" kolom="c_0030" rijnr="2"/>
+</rapportage>

@@ -1,0 +1,18 @@
+{
+  "generic": [
+    "Extract FormulierID from rapportage metadata",
+    "Extract each post record",
+    "Normalize rij and kolom into axis_row and axis_col",
+    "Resolve EBA_<Domain>_<Member> through the Excel hierarchy",
+    "Fall back to the original EBA code when no hierarchy mapping exists",
+    "Convert numeric text into numeric values when valid",
+    "Convert TRUE/FALSE text into JSON booleans",
+    "Detect exact duplicate post records",
+    "Preserve rijnr as a logical grouping indicator"
+  ],
+  "DEMO_MB0100": [
+    "Apply the generic transformation",
+    "Apply a representative Formulier-specific code mapping",
+    "Map DEMO_REL_01 to mrel-demo-01"
+  ]
+}

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rapportage registratienummer="DEMO-205" nihil="false" period="2024-06-30" FormulierID="DEMO_MB0100" versie="1" frequentie="M">
+    <post value="EBA_FIN_X03" cube="c02" rij="r_0010" kolom="c_0010" rijnr="1"/>
+    <post value="DEMO_REL_01" cube="c02" rij="r_0020" kolom="c_0010" rijnr="1"/>
+    <post value="FALSE" cube="c02" rij="r_0030" kolom="c_0010" rijnr="1"/>
+    <post value="450000.75" cube="c02" rij="r_0040" kolom="c_0010" rijnr="1"/>
+</rapportage>

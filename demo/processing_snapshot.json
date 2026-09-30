@@ -1,0 +1,13 @@
+{
+  "file": "DEMO_CB77.xml",
+  "formulier_id": "DEMO_CB77",
+  "records_read": 10,
+  "records_emitted": 9,
+  "duplicates": 1,
+  "hierarchy_hits": 3,
+  "hierarchy_misses": 1,
+  "booleans_converted": 2,
+  "numeric_values_converted": 3,
+  "group_ids_seen": ["1", "2"],
+  "status": "demo-success-with-warning"
+}

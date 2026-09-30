@@ -1,0 +1,8 @@
+{
+  "_note": "Machine-readable, representative rules for the portfolio demo. Fictional; not the original client rules. rules.json remains the human-readable description.",
+  "DEMO_MB0100": {
+    "value_map": {
+      "DEMO_REL_01": "mrel-demo-01"
+    }
+  }
+}

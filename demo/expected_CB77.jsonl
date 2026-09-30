@@ -1,0 +1,9 @@
+{"axis_row":"0010","axis_col":"0010","Value":"Corporate Lending","report_code":"cb77-report"}
+{"axis_row":"0020","axis_col":"0010","Value":1250000.5,"report_code":"cb77-report"}
+{"axis_row":"0030","axis_col":"0010","Value":false,"report_code":"cb77-report"}
+{"axis_row":"0040","axis_col":"0010","Value":"Retail Deposits","report_code":"cb77-report"}
+{"axis_row":"0050","axis_col":"0010","Value":"EBA_FIN_X99","report_code":"cb77-report"}
+{"axis_row":"0060","axis_col":"0010","Value":750000000000000000,"report_code":"cb77-report"}
+{"axis_row":"0070","axis_col":"0010","Value":"Credit Exposure","report_code":"cb77-report"}
+{"axis_row":"0070","axis_col":"0020","Value":0.875,"report_code":"cb77-report"}
+{"axis_row":"0070","axis_col":"0030","Value":true,"report_code":"cb77-report"}
