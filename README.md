@@ -4,6 +4,19 @@ A portfolio recreation inspired by a banking reporting-data solution: large XML 
 
 > This is **not** the original client application and uses **no client data**. Everything in `demo/` is fictional, and the FormulierID rule sets are representative, not the original rules.
 
+## Documentation
+
+Full project documentation is in [`project-docs/`](project-docs/):
+
+| Document | Read it for |
+|---|---|
+| [PROJECT_OVERVIEW.md](project-docs/PROJECT_OVERVIEW.md) | The problem, the approach, the outcome, and what is recalled versus representative |
+| [ARCHITECTURE.md](project-docs/ARCHITECTURE.md) | How the processor, page and workbench fit together, with diagrams |
+| [PROCESSING_RULES.md](project-docs/PROCESSING_RULES.md) | Exactly what the transformation does, the output contract, and the findings |
+| [DEMO_DATA.md](project-docs/DEMO_DATA.md) | The fictional data and the expected result of every scenario |
+| [TESTING.md](project-docs/TESTING.md) | What is tested, how to run it, results, and a scale measurement |
+| [DECISIONS_AND_LIMITATIONS.md](project-docs/DECISIONS_AND_LIMITATIONS.md) | Decisions made, known limits, open questions |
+
 ## What's here
 
 | Folder | What it is |
@@ -25,7 +38,7 @@ python3 -m venv .venv
 .venv/bin/python -m processor.cli demo/DEMO_CB77.xml          # JSONL to stdout, warnings to stderr
 .venv/bin/python -m processor.cli demo/DEMO_CB77.xml demo/DEMO_MB0100.xml --out-dir out
 .venv/bin/python -m processor.generate_snapshot               # refresh frontend/src/data/snapshot.json
-npm run test:py                                               # 25 tests
+npm run test:py                                               # 28 tests
 ```
 
 Frontend (Node 20+):
