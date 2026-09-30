@@ -6,3 +6,5 @@ __pycache__/
 .pytest_cache/
 # Private project documents; not published
 docs/
+.vercel
+.env*
