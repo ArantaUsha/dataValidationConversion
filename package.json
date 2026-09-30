@@ -1,0 +1,12 @@
+{
+  "name": "xml-to-jsonl-portfolio",
+  "version": "0.1.0",
+  "description": "Portfolio recreation: XML to JSONL reporting-data transformation. See frontend/, processor/ and workbench/.",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "test": "node --test workbench/test/*.test.js",
+    "start": "python3 -m http.server 8080 --directory workbench",
+    "test:py": ".venv/bin/python -m pytest processor/tests -q"
+  }
+}

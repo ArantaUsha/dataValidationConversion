@@ -1,0 +1,191 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>XML to JSONL Converter</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <header class="top">
+    <div class="wrap">
+      <h1>XML → JSONL Reporting Converter</h1>
+      <p class="sub">A portfolio rebuild of a banking data-preparation utility. Runs entirely in your browser; nothing is uploaded. All sample data is invented.</p>
+      <nav class="tabs" role="tablist">
+        <button role="tab" aria-selected="true" data-tab="convert">Convert</button>
+        <button role="tab" aria-selected="false" data-tab="how">How it works</button>
+        <button role="tab" aria-selected="false" data-tab="rules">Rules &amp; assumptions</button>
+      </nav>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <!-- ============ CONVERT ============ -->
+    <section id="tab-convert" class="panel">
+      <div class="grid2">
+        <div class="card">
+          <h2><span class="n">1</span> Source XML</h2>
+          <p class="hint">A report file: a <code>&lt;rapportage&gt;</code> root holding thousands of <code>&lt;post&gt;</code> elements.</p>
+          <div id="drop" class="drop" tabindex="0">Drop an .xml file here or <label class="link">browse<input id="xmlFile" type="file" accept=".xml,text/xml" hidden></label></div>
+          <div class="row">
+            <button id="loadSample" class="btn">Load sample</button>
+            <button id="loadLarge" class="btn">Generate 65,000-post file</button>
+          </div>
+          <textarea id="xmlText" spellcheck="false" placeholder="…or paste XML here"></textarea>
+          <div id="metaChips" class="chips"></div>
+        </div>
+
+        <div class="card">
+          <h2><span class="n">2</span> Reference data &amp; rules</h2>
+          <p class="hint">Hierarchies turn coded values like <code>EBA_FIN_X01</code> into readable ones. Needs columns: Domain Code, Member Code, Structure, Date.</p>
+          <div class="row">
+            <label class="btn">Upload .xlsx / .csv<input id="hierFile" type="file" accept=".xlsx,.xls,.csv" hidden></label>
+            <button id="hierSample" class="btn">Use sample hierarchies</button>
+          </div>
+          <div id="hierStatus" class="status">No hierarchies loaded. Coded values will be kept as-is.</div>
+
+          <label class="field">FormulierID rule sets <span class="hint">(JSON; applied on top of the generic transformation)</span>
+            <textarea id="rulesText" class="short" spellcheck="false"></textarea>
+          </label>
+          <div id="rulesError" class="status err" hidden></div>
+
+          <label class="field">Duplicate handling
+            <select id="dupMode">
+              <option value="keep">Warn and keep every record</option>
+              <option value="drop">Warn and drop repeats</option>
+            </select>
+          </label>
+          <label class="check"><input id="groupMode" type="checkbox"> Group output by <code>rijnr</code> <span class="tag">new extra</span></label>
+        </div>
+      </div>
+
+      <div class="runbar">
+        <button id="run" class="btn primary">Convert to JSONL</button>
+        <span id="runHint" class="hint"></span>
+      </div>
+
+      <div id="results" hidden>
+        <div id="fatal" class="banner err" hidden></div>
+
+        <div id="tiles" class="tiles"></div>
+
+        <div class="grid2">
+          <div class="card">
+            <h2>Warnings <span id="warnCount" class="count"></span></h2>
+            <div class="row filters" id="warnFilters"></div>
+            <ul id="warnList" class="warns"></ul>
+          </div>
+          <div class="card">
+            <h2>JSONL output <span id="lineCount" class="count"></span></h2>
+            <div class="row">
+              <button id="download" class="btn primary">Download .jsonl</button>
+              <button id="copy" class="btn">Copy preview</button>
+            </div>
+            <pre id="preview" class="code"></pre>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>Trace: what happened to each record</h2>
+          <p class="hint">The first records, shown from source to output, with the step that changed them.</p>
+          <div class="scroll"><table id="trace"></table></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ HOW IT WORKS ============ -->
+    <section id="tab-how" class="panel" hidden>
+      <div class="card">
+        <h2>The problem</h2>
+        <p>Bank reports (monthly, quarterly, annual) start as raw XML files with 60,000–70,000 <code>&lt;post&gt;</code> records each. Business users had to turn them into exactly the structure and values the reporting platform expected, across about 25 different reports, each with its own FormulierID. Preparing one took roughly <strong>20–25 days by hand</strong>. With the Python automation it took about <strong>one day per correct file</strong> <span class="tag">recollection, not measured</span>.</p>
+      </div>
+
+      <div class="card">
+        <h2>The pipeline</h2>
+        <ol class="steps">
+          <li><b>Parse the XML.</b> Malformed XML stops the run; nothing is produced.</li>
+          <li><b>Read metadata.</b> FormulierID, period, version, frequency from <code>&lt;rapportage&gt;</code>.</li>
+          <li><b>Extract every <code>&lt;post&gt;</code>.</b> Value, row (<code>rij</code>), column (<code>kolom</code>), <code>rijnr</code>.</li>
+          <li><b>Resolve coded values.</b> <code>EBA_FIN_X01</code> → Domain <code>FIN</code> + Member <code>X01</code> → look up Structure in the Hierarchies sheet (latest date wins). No match: keep the code, so the gap is visible.</li>
+          <li><b>Normalise types.</b> <code>"42.00"</code> becomes <code>42</code>, <code>"0.93"</code> becomes <code>0.93</code>, text stays text.</li>
+          <li><b>Apply FormulierID rules.</b> Only for reports that need them: <code>FALSE</code> → <code>false</code>, internal business codes.</li>
+          <li><b>Detect duplicates.</b> Highlight with line numbers; keep going so users see every problem in one pass.</li>
+          <li><b>Keep related posts together with <code>rijnr</code>.</b> Posts sharing a number belong to one logical group. It is preserved for grouping and never used in calculations.</li>
+          <li><b>Write JSONL.</b> One JSON object per line, ready to upload.</li>
+        </ol>
+      </div>
+
+      <div class="card">
+        <h2>The feedback loop</h2>
+        <div class="flow">
+          <div>Raw XML</div><i>→</i><div>Convert</div><i>→</i><div>JSONL</div><i>→</i><div class="ext">Upload to reporting platform</div>
+          <i>→</i><div class="ext">Accepted, or exact row/column error</div><i>→</i><div>Business user fixes the XML</div><i>↺</i>
+        </div>
+        <p class="hint">The downstream reporting platform does the final validation. This app covers the boxes before it. The full file is always reprocessed after a fix.</p>
+      </div>
+
+      <div class="card">
+        <h2>Example: one record, end to end</h2>
+        <div class="grid2">
+          <div><h3>Source</h3><pre class="code">&lt;post value="EBA_FIN_X01" rij="r_0010" kolom="c_0010" rijnr="1"/&gt;</pre></div>
+          <div><h3>Output</h3><pre class="code">{"axis_row": "0010", "axis_col": "0010", "Value": "Corporate Lending"}</pre></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ RULES ============ -->
+    <section id="tab-rules" class="panel" hidden>
+      <div class="card">
+        <h2>Built from the original notes</h2>
+        <p class="hint">Each item is marked so a reader can tell recovered behaviour from new decisions.</p>
+        <table class="plain">
+          <thead><tr><th>Behaviour</th><th>Status</th></tr></thead>
+          <tbody>
+            <tr><td>Generic transformation for all files; extra rules per FormulierID</td><td><span class="tag ok">confirmed</span></td></tr>
+            <tr><td>EBA code → Structure via Hierarchies, latest date wins; unmapped code kept</td><td><span class="tag ok">confirmed</span></td></tr>
+            <tr><td>Numeric strings → int / float; other text unchanged</td><td><span class="tag ok">confirmed</span></td></tr>
+            <tr><td>Boolean conversion (<code>FALSE</code> → <code>false</code>) for specific reports</td><td><span class="tag ok">confirmed</span></td></tr>
+            <tr><td>FormulierID → internal business code (e.g. DEMO_MB0100 → mrel-demo-01)</td><td><span class="tag ok">confirmed</span></td></tr>
+            <tr><td>Exact duplicate posts highlighted with line number; run continues</td><td><span class="tag ok">confirmed</span></td></tr>
+            <tr><td>Output rows: <code>axis_row</code>, <code>axis_col</code>, <code>Value</code> (<code>r_</code>/<code>c_</code> prefixes removed)</td><td><span class="tag ok">confirmed sample</span></td></tr>
+            <tr><td>Duplicate / same-cell checks include <code>rijnr</code> in the cell identity</td><td><span class="tag warn">assumption</span> (otherwise every row would clash)</td></tr>
+            <tr><td><code>rijnr</code> is used internally (grouping, cell identity) and is <b>not</b> written to the output</td><td><span class="tag ok">confirmed</span></td></tr>
+            <tr><td>Numeric conversion drops leading zeros (<code>00123</code> → <code>123</code>)</td><td><span class="tag ok">confirmed</span> (numbers are values, not text)</td></tr>
+            <tr><td>Hierarchy lookup is case-sensitive (<code>X01</code> ≠ <code>x01</code>)</td><td><span class="tag ok">confirmed</span></td></tr>
+            <tr><td>Business code written as a <code>report_code</code> field on each line</td><td><span class="tag warn">assumption</span> (real location unknown)</td></tr>
+            <tr><td>Optional grouping by <code>rijnr</code> as <code>{rijnr, cells[]}</code> lines</td><td><span class="tag">new extra, not in the original</span> (off by default)</td></tr>
+            <tr><td>Duplicates kept by default; "drop repeats" offered</td><td><span class="tag warn">assumption</span></td></tr>
+            <tr><td>Accept both <code>rij</code> and <code>row</code>; case-insensitive attribute names</td><td><span class="tag warn">assumption</span> (notes disagree)</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="card">
+        <h2>New in this rebuild</h2>
+        <ul>
+          <li>Browser front end with drag-and-drop, so no Python setup is needed.</li>
+          <li>Warnings panel with line numbers, and a per-record trace.</li>
+          <li>Warning for posts missing a row or column (the original skipped them silently).</li>
+          <li>Info notice when values lose leading zeros in numeric conversion.</li>
+          <li>Info notice when the same cell appears with different values.</li>
+          <li>Editable rule sets and a 65,000-post generator to demonstrate scale.</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h2>Still unknown</h2>
+        <ul>
+          <li>The exact production JSONL schema (the notes show two shapes).</li>
+          <li>What <code>rijnr</code> grouping produced in the real output.</li>
+          <li>How FormulierID selected its rules in the original code, and the full rule list.</li>
+          <li>Whether duplicates meant more than identical value + row + column.</li>
+          <li>Why the original tracked already-processed mapped values.</li>
+        </ul>
+      </div>
+    </section>
+  </main>
+
+  <footer class="wrap foot">Rebuilt from recollection for portfolio use. Portfolio recreation; not the original application. All sample data is fictional.</footer>
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>
